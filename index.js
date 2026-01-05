@@ -2,7 +2,9 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// โหลด tw-voucher ให้ชัวร์
+/* ===============================
+   โหลด tw-voucher ให้ใช้ได้แน่นอน
+================================ */
 let twvoucher;
 const twPackage = require('@fortune-inc/tw-voucher');
 
@@ -14,15 +16,20 @@ if (typeof twPackage === 'function') {
     twvoucher = twPackage.default || twPackage;
 }
 
-// health check
+/* ===============================
+   หน้าเช็คสถานะเซิร์ฟเวอร์
+================================ */
 app.get('/', (req, res) => {
     res.json({
         status: 'ONLINE',
-        service: 'TrueWallet Voucher API'
+        message: 'TrueWallet Voucher API is running'
     });
 });
 
-// redeem endpoint
+/* ===============================
+   API รับซอง
+   /redeem?phone=xxx&link=xxx
+================================ */
 app.get('/redeem', async (req, res) => {
     const { phone, link } = req.query;
 
@@ -41,6 +48,8 @@ app.get('/redeem', async (req, res) => {
     }
 
     try {
+        console.log(`[REDEEM] phone=${phone}`);
+
         const result = await twvoucher(phone, link);
 
         if (result && result.amount) {
@@ -57,6 +66,7 @@ app.get('/redeem', async (req, res) => {
         }
 
     } catch (err) {
+        console.error(err);
         return res.json({
             status: 'ERROR',
             message: err.message
@@ -64,7 +74,12 @@ app.get('/redeem', async (req, res) => {
     }
 });
 
-// start server
+/* ===============================
+   START SERVER
+================================ */
 app.listen(PORT, () => {
-    console.log(`TrueWallet API running on port ${PORT}`);
+    console.log('=================================');
+    console.log(' TrueWallet Voucher API');
+    console.log(` Running on port ${PORT}`);
+    console.log('=================================');
 });
