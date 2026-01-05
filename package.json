@@ -1,0 +1,14 @@
+{
+  "name": "tw-voucher-api",
+  "version": "1.0.0",
+  "description": "TrueWallet Voucher API",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "@fortune-inc/tw-voucher": "^1.0.6"
+  }
+}
